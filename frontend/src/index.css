@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Outfit';
+  src: local('Font'), url(/fonts/font-1.woff2) format('woff');
+}
+@font-face {
+  font-family: 'Prata';
+  src: local('Font'), url(/fonts/font-2.woff2) format('woff');
+}
+
 *{
   font-family: "Outfit";
 }
@@ -13,6 +22,10 @@
 }
 a.active hr{
   display: block;
+}
+
+::-webkit-scrollbar{
+  display: none;
 }
 
 @media (max-width:640px) {

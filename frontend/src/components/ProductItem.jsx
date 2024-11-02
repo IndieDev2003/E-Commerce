@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { lazy, useContext } from "react";
 import { ShopContext } from "../Context/ShopContext";
 import { Link } from "react-router-dom";
 
@@ -11,6 +11,7 @@ const ProductItem = ({ id, image, name, price }) => {
           src={image[0]}
           alt="product-image"
           className="hover:scale-110 transition ease-in-out duration-500"
+          loading={'lazy'}
         />
       </div>
       <p className="pt-3 pb-1 text-sm">{name}</p>
