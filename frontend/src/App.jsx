@@ -1,7 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Navbar from "./components/Navbar";
-import SearchBar from './components/SearchBar'
+import SearchBar from "./components/SearchBar";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Cart from "./pages/Cart";
@@ -17,8 +20,22 @@ function App() {
   return (
     <>
       <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] duration-700 transition-all ">
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
+
         <Navbar />
-        <SearchBar/>
+        <SearchBar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/collection" element={<Collection />} />
@@ -30,7 +47,7 @@ function App() {
           <Route path="/place-order" element={<PlaceOrder />} />
           <Route path="/orders" element={<Orders />} />
         </Routes>
-        <Footer/>
+        <Footer />
       </div>
     </>
   );
