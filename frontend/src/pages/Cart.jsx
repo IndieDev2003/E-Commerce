@@ -2,9 +2,10 @@ import React, { useState, useContext, useEffect } from "react";
 import { ShopContext } from "../Context/ShopContext";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
+import CartTotal from "../components/CartTotal";
 
 const Cart = () => {
-  const { products, currency, cartItems, updateQuantity } =
+  const { products, currency, cartItems, updateQuantity, navigate } =
     useContext(ShopContext);
 
   const [cartData, setCartData] = useState([]);
@@ -67,6 +68,15 @@ const Cart = () => {
                 className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1 "
                 min={1}
                 defaultValue={item.quantity}
+                onChange={(e) =>
+                  e.target.value === "" || e.target.value === "0"
+                    ? null
+                    : updateQuantity(
+                        item._id,
+                        item.size,
+                        Number(e.target.value)
+                      )
+                }
               />
               <img
                 src={assets.bin_icon}
@@ -77,6 +87,20 @@ const Cart = () => {
             </div>
           );
         })}
+      </div>
+
+      <div className="flex justify-end my-20">
+        <div className="w-full sm:w-[450px]">
+          <CartTotal />
+          <div className="w-full text-end">
+            <button
+              onClick={() => navigate("/place-order")}
+              className="bg-black active:bg-gray-700 rounded hover:rounded-xl transition-all text-sm mt-2 py-2 px-8 text-white"
+            >
+              Proceed To Checkout
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
