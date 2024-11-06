@@ -13,3 +13,8 @@
 .active{
   background-color: rgb(228, 92, 39);
 }
+select,input,textarea{
+  border:1px solid rgb(7, 64, 252);
+  outline-color: rgb(0, 109, 252);
+  border-radius: 4px;
+}

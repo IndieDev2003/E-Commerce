@@ -1,8 +1,8 @@
 import React from 'react'
 
-const List = () => {
+const List = ({token}) => {
   return (
-    <div>List</div>
+    <div></div>
   )
 }
 
