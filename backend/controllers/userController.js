@@ -9,16 +9,42 @@ const createToken = (id) => {
 
 //Route for user Login
 const loginUser = async (req, res) => {
-  res.json({
-    message: "Login API Working",
-  });
+  try {
+    const { email, password } = req.body;
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User Doesn't Exists",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (isMatch) {
+      const token = createToken(user._id);
+      res.json({ success: true, token });
+    } else {
+      res.json({
+        success: false,
+        message: "Invalid Credentials",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 //route for user registration
 
 const registerUser = async (req, res) => {
-
-    //Start of try block
+  //Start of try block
   try {
     const { name, email, password } = req.body;
 
@@ -40,26 +66,43 @@ const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = new userModel({ name, email, password: hashedPassword });
+    const newUser = new userModel({
+      name,
+      email,
+      password: hashedPassword,
+    });
     const user = await newUser.save();
 
     const token = createToken(user._id);
 
-      //setting jwt token
-      res.json({ success: true, token });
-      
-      //try ended and catch starts here
+    //setting jwt token
+    res.json({ success: true, token });
+
+    //try ended and catch starts here
   } catch (error) {
-      console.log(error);
-      res.json({success:false})
+    console.log(error);
+    res.json({ success: false }, error.message);
   }
 };
 
 //route for admin login
 const adminLogin = async (req, res) => {
-  res.json({
-    message: "Admin Login API Working",
-  });
+  try {
+    const { email, password } = req.body;
+    if (
+      email === process.env.ADMIN_EMAIL &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      const token = jwt.sign(email + password, process.env.JWT_SECRET);
+      res.json({ success: true, token });
+    } else {
+      res.json({ success: false, message: "Invalid Credentials" });
+      // console.log(email,password)
+    }
+    // console.log(email,password)
+  } catch (error) {
+    res.json({ success: false, message: error.message});
+  }
 };
 
 export { loginUser, registerUser, adminLogin };
