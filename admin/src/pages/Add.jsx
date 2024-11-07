@@ -16,11 +16,12 @@ const Add = ({ token }) => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Men");
   const [subCategory, setSubCategory] = useState("Topwear");
-  const [sizes, setSizes] = useState([]);
+  const [sizes, setSizes] = useState(["S"]);
   const [bestseller, setBestseller] = useState(false);
-
+  console.log(sizes.includes("S"));
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    console.log(sizes);
 
     try {
       const formData = new FormData();
@@ -53,13 +54,12 @@ const Add = ({ token }) => {
         setPrice("");
         setCategory("");
         setSubCategory("");
-        setSizes([]);
+        setSizes(["S"]);
 
         setImage1(false);
         setImage2(false);
         setImage3(false);
         setImage4(false);
-        
       } else {
         toast.error(response.data.message);
       }
@@ -211,8 +211,8 @@ const Add = ({ token }) => {
             }
           >
             <p
-              className={`bg-slate-300 px-3 py-1 cursor-pointer ${
-                sizes.includes("S") ? "bg-pink-300" : ""
+              className={` px-3 py-1 cursor-pointer ${
+                sizes.includes('S') ? "bg-pink-400" : "bg-slate-300"
               }`}
             >
               S
@@ -228,8 +228,8 @@ const Add = ({ token }) => {
             }
           >
             <p
-              className={`bg-slate-300 px-3 py-1 cursor-pointer ${
-                sizes.includes("M") ? "bg-pink-300" : ""
+              className={` px-3 py-1 cursor-pointer ${
+                sizes.includes("M") ? "bg-pink-400" : "bg-slate-300"
               }`}
             >
               M
@@ -245,8 +245,8 @@ const Add = ({ token }) => {
             }
           >
             <p
-              className={`bg-slate-300 px-3 py-1 cursor-pointer ${
-                sizes.includes("L") ? "bg-pink-300" : ""
+              className={` px-3 py-1 cursor-pointer ${
+                sizes.includes("L") ? "bg-pink-400" : "bg-slate-300"
               }`}
             >
               L
@@ -262,8 +262,8 @@ const Add = ({ token }) => {
             }
           >
             <p
-              className={`bg-slate-300 px-3 py-1 cursor-pointer ${
-                sizes.includes("XL") ? "bg-pink-400" : ""
+              className={` px-3 py-1 cursor-pointer ${
+                sizes.includes("XL") ? "bg-pink-400" : "bg-slate-300"
               }`}
             >
               XL
@@ -279,8 +279,8 @@ const Add = ({ token }) => {
             }
           >
             <p
-              className={`bg-slate-300 px-3 py-1 cursor-pointer ${
-                sizes.includes("XXL") ? "bg-pink-300" : ""
+              className={` px-3 py-1 cursor-pointer ${
+                sizes.includes("XXL") ? "bg-pink-400" : "bg-slate-300"
               }`}
             >
               XXL
