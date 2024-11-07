@@ -26,7 +26,7 @@ const Login = ({ setToken }) => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white shadow-lg rounded-lg px-8 py-6 max-w-sm ">
-        <h1 className="text-2xl font-bold mb-2">Admin Panel</h1>
+        <h1 className="text-2xl font-bold mb-2">Akisa Admin Panel</h1>
         <form onSubmit={onSumbitHandler}>
           <div className="mb-3 min-w-72">
             <p className="text-sm font-medium text-black mb-2">Email Address</p>
