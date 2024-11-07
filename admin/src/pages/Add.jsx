@@ -6,7 +6,6 @@ import { backendURL } from "../App";
 import { toast } from "react-toastify";
 
 const Add = ({ token }) => {
-
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
@@ -24,40 +23,56 @@ const Add = ({ token }) => {
     e.preventDefault();
 
     try {
-      
       const formData = new FormData();
 
-      formData.append("name", name)
-      formData.append("description", description)
-      formData.append("price", price)
-      formData.append("category", category)
-      formData.append("subCategory", subCategory)
-      formData.append("bestseller", bestseller)
-      formData.append("sizes", JSON.stringify(sizes))
-      
-      image1 && formData.append("image1",image1)
-      image2 && formData.append("image2",image2)
-      image3 && formData.append("image3",image3)
-      image4 && formData.append("image4",image4)
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("category", category);
+      formData.append("subCategory", subCategory);
+      formData.append("bestseller", bestseller);
+      formData.append("sizes", JSON.stringify(sizes));
 
-      const response = await axios.post(backendURL + '/api/product/add', formData, { headers: { token } })
-      
+      image1 && formData.append("image1", image1);
+      image2 && formData.append("image2", image2);
+      image3 && formData.append("image3", image3);
+      image4 && formData.append("image4", image4);
+
+      const response = await axios.post(
+        backendURL + "/api/product/add",
+        formData,
+        { headers: { token } }
+      );
+
       if (response.data.success) {
-        toast.success("Product Added Succesfully")
-      } else {
-        toast.error(response.data.message)
-      }
-      
-      console.log(response);
-      
+        toast.success("Product Added Succesfully");
 
-    } catch (error) {
-      
-    }
-  }
+        setBestseller(false);
+        setName("");
+        setDescription("");
+        setPrice("");
+        setCategory("");
+        setSubCategory("");
+        setSizes([]);
+
+        setImage1(false);
+        setImage2(false);
+        setImage3(false);
+        setImage4(false);
+        
+      } else {
+        toast.error(response.data.message);
+      }
+
+      console.log(response);
+    } catch (error) {}
+  };
 
   return (
-    <form onSubmit={onSubmitHandler} className="flex flex-col w-full items-start gap-2">
+    <form
+      onSubmit={onSubmitHandler}
+      className="flex flex-col w-full items-start gap-2"
+    >
       {/* Uploading Images */}
       <div>
         <p className="mb-3 ">Upload Image</p>
@@ -118,7 +133,6 @@ const Add = ({ token }) => {
         </div>
       </div>
 
-      
       {/* Product Name */}
       <div className="w-full">
         <p>Product Name</p>
@@ -277,7 +291,12 @@ const Add = ({ token }) => {
 
       {/* Setting Bestseller */}
       <div className="flex items-center gap-2 mt-2">
-        <input onChange={()=>setBestseller(prev=>!prev)} checked={bestseller} type="checkbox" id="bestseller" />
+        <input
+          onChange={() => setBestseller((prev) => !prev)}
+          checked={bestseller}
+          type="checkbox"
+          id="bestseller"
+        />
         <label className="cursor-pointer" htmlFor="bestseller">
           Add to Bestseller
         </label>

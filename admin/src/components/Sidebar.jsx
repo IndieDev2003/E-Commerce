@@ -8,6 +8,13 @@ const Sidebar = () => {
       <div className="flex flex-col gap-4 pt-6 pl-[20%] text-[15px]">
         <NavLink
           className={`flex items-center gap-2 border border-gray-300 border-r-0 rounded-r-none px-3 py-2 rounded-lg`}
+          to={"/"}
+        >
+          <img className="w-5 h-5" src={assets.home} alt="add-page-icon" />
+          <p className="hidden md:block">Home</p>
+        </NavLink>
+        <NavLink
+          className={`flex items-center gap-2 border border-gray-300 border-r-0 rounded-r-none px-3 py-2 rounded-lg`}
           to={"/add"}
         >
           <img className="w-5 h-5" src={assets.add_icon} alt="add-page-icon" />

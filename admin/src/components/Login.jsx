@@ -15,6 +15,7 @@ const Login = ({ setToken }) => {
         password,
       });
       if (response.data.success) {
+        toast.success("Welcome Back Admin");
         setToken(response.data.token);
       } else {
         toast.error(response.data.message);
