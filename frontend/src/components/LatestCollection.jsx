@@ -4,12 +4,12 @@ import Title from "./Title";
 import ProductItem from "./ProductItem";
 
 const LatestCollection = () => {
-  const { products } = useContext(ShopContext);
+  const { products,backendUrl } = useContext(ShopContext);
   const [latestProduct, setLatestProducts] = useState([]);
   // console.log(products);
   useEffect(() => {
-    setLatestProducts(products.splice(0, 10));
-  }, []);
+    products && setLatestProducts(products.slice(0, 10));
+  }, [products]);
   return (
     <div className="my-10 ">
       <div className="text-center py-8 text-3xl">
