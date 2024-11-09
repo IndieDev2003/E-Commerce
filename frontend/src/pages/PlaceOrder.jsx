@@ -43,19 +43,18 @@ const PlaceOrder = () => {
     event.preventDefault();
     try {
       let orderItems = []
-      for (const items in cartItems) {
-        for (const item in cartItems[items]) {
-          if (cartItems[items][item] > 0) {
-            const itemInfo = structuredClone(products.find(product => product._id === items))
-            if (itemInfo) {
-              itemInfo.size = item
-              itemInfo.quantity = cartItems[items][item]
-              orderItems.push(itemInfo)
-            }
+      for (const items in cartItems)  {
+      for (const item in cartItems[items]) {
+        if (cartItems[items][item] > 0) {
+          const itemInfo = structuredClone(products.find(product => product._id === items));
+          if (itemInfo) {
+            itemInfo.size = item;
+            itemInfo.quantity = cartItems[items][item];
+            orderItems.push(itemInfo);
           }
         }
       }
-
+    }
       console.log(orderItems)
       console.log(formData)
 
@@ -68,7 +67,7 @@ const PlaceOrder = () => {
   return (
     <form onSubmit={ onSubmitHandler} className="flex flex-col sm:flex-row justify-between gap-2 pt-5 sm:pt-14 min-h-[80vh] border-t">
       {/* Left Side */}
-      <div
+      <form
         onSubmit={(e)=>onSubmitHandler(e)}
         className="flex flex-col gap-4 w-full sm:max-w-[480px]"
       >
