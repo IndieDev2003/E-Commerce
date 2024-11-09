@@ -4,7 +4,8 @@ import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
 import { assets } from "../assets/assets";
 import { ShopContext } from "../Context/ShopContext";
-import { formToJSON } from "axios";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const PlaceOrder = () => {
   const {
@@ -18,7 +19,7 @@ const PlaceOrder = () => {
     products,
   } = useContext(ShopContext);
 
-  const [method, setMethod] = useState("cod");
+  const [method, setMethod] = useState("COD");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -39,33 +40,70 @@ const PlaceOrder = () => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
-      let orderItems = []
-      for (const items in cartItems)  {
-      for (const item in cartItems[items]) {
-        if (cartItems[items][item] > 0) {
-          const itemInfo = structuredClone(products.find(product => product._id === items));
-          if (itemInfo) {
-            itemInfo.size = item;
-            itemInfo.quantity = cartItems[items][item];
-            orderItems.push(itemInfo);
+      let orderItems = [];
+      for (const items in cartItems) {
+        for (const item in cartItems[items]) {
+          if (cartItems[items][item] > 0) {
+            const itemInfo = structuredClone(
+              products.find((product) => product._id === items)
+            );
+            if (itemInfo) {
+              itemInfo.size = item;
+              itemInfo.quantity = cartItems[items][item];
+              orderItems.push(itemInfo);
+            }
           }
         }
       }
-    }
-      console.log(orderItems)
-      console.log(formData)
 
+      let orderData = {
+        address: formData,
+        items: orderItems,
+        amount: getCartAmount() + delivery_fee,
+      };
+
+      switch (method) {
+        //api calls for payment method
+        case "COD":
+          const response = await axios.post(
+            backendUrl + "/api/order/place",
+            orderData,
+            { headers: { token } }
+          );
+
+          console.log(response.data);
+          if (response.data.success) {
+            toast.success(response.data.message);
+            setCartItems({});
+            navigate("/orders");
+          } else {
+            toast.error(response.data.message);
+          }
+
+          break;
+        case "razorpay":
+          break;
+        default:
+          break;
+      }
+
+      // console.log(orderItems)
+      // console.log(formData)
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      toast.error(error.message)
     }
     // console.log("hello")
   };
 
   return (
-    <form onSubmit={ onSubmitHandler} className="flex flex-col sm:flex-row justify-between gap-2 pt-5 sm:pt-14 min-h-[80vh] border-t">
+    <form
+      onSubmit={onSubmitHandler}
+      className="flex flex-col sm:flex-row justify-between gap-2 pt-5 sm:pt-14 min-h-[80vh] border-t"
+    >
       {/* Left Side */}
       <div
         // onSubmit={(e)=>onSubmitHandler(e)}
@@ -76,14 +114,13 @@ const PlaceOrder = () => {
         </div>
 
         <div className="flex gap-3">
-          
           <input
             required
             value={formData.firstName}
             onChange={onChangeHandler}
             type="text"
             name="firstName"
-            className="border border-gray-300 rounded py-2 px-3 w-ull"
+            className="border border-gray-300 rounded py-2 px-3 w-1/2 sm:w-full"
             placeholder="First Name"
           />
           <input
@@ -92,7 +129,7 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             type="text"
             name="lastName"
-            className="border border-gray-300 rounded py-2 px-3 w-full"
+            className="border border-gray-300 rounded py-2 px-3 w-1/2 sm:w-full"
             placeholder="Last Name"
           />
         </div>
@@ -121,7 +158,7 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             type="text"
             name="city"
-            className="border border-gray-300 rounded py-2 px-3 w-ull"
+            className="border border-gray-300 rounded py-2 px-3 w-1/2 sm:w-full"
             placeholder="City"
           />
           <input
@@ -130,7 +167,7 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             type="text"
             name="state"
-            className="border border-gray-300 rounded py-2 px-3 w-full"
+            className="border border-gray-300 rounded py-2 px-3 w-1/2 sm:w-full"
             placeholder="State"
           />
         </div>
@@ -141,7 +178,7 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             type="number"
             name="zipcode"
-            className="border border-gray-300 rounded py-2 px-3 w-ull"
+            className="border border-gray-300 rounded py-2 px-3 w-1/2 sm:w-full"
             placeholder="Zipcode"
           />
           <input
@@ -150,7 +187,7 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             type="text"
             name="country"
-            className="border border-gray-300 rounded py-2 px-3 w-full"
+            className="border border-gray-300 rounded py-2 px-3 w-1/2 sm:w-full"
             placeholder="Country"
           />
         </div>
@@ -176,12 +213,12 @@ const PlaceOrder = () => {
           {/* Text Payment Method Selection */}
           <div className="flex gap-3 flex-col sm:flex-row ">
             <div
-              onClick={() => setMethod("stripe")}
+              onClick={() => setMethod("STRIPE")}
               className="flex items-center gap-3 border rounded-md p-2 px-3 cursor-pointer"
             >
               <p
                 className={`transition ${
-                  method === "stripe" ? "bg-green-500" : ""
+                  method === "STRIPE" ? "bg-green-500" : ""
                 } min-w-4 h-4 border rounded-full`}
               ></p>
               <img
@@ -191,12 +228,12 @@ const PlaceOrder = () => {
               />
             </div>
             <div
-              onClick={() => setMethod("razorpay")}
+              onClick={() => setMethod("RAZORPAY")}
               className="flex items-center gap-3 border rounded-md p-2 px-3 cursor-pointer"
             >
               <p
                 className={`transition ${
-                  method === "razorpay" ? "bg-green-500" : ""
+                  method === "RAZORPAY" ? "bg-green-500" : ""
                 } min-w-4 h-4 border rounded-full`}
               ></p>
               <img
@@ -206,12 +243,12 @@ const PlaceOrder = () => {
               />
             </div>
             <div
-              onClick={() => setMethod("cod")}
+              onClick={() => setMethod("COD")}
               className="flex items-center gap-3 border rounded-md p-2 px-3 cursor-pointer"
             >
               <p
                 className={`transition ${
-                  method === "cod" ? "bg-green-500" : ""
+                  method === "COD" ? "bg-green-500" : ""
                 } min-w-4 h-4 border rounded-full`}
               ></p>
               <p className="text-gray-500 text-sm font-medium mx-4">

@@ -18,10 +18,10 @@ const Add = ({ token }) => {
   const [subCategory, setSubCategory] = useState("Topwear");
   const [sizes, setSizes] = useState(["S"]);
   const [bestseller, setBestseller] = useState(false);
-  console.log(sizes.includes("S"));
+  // console.log(sizes.includes("S"));
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(sizes);
+    // console.log(sizes);
 
     try {
       const formData = new FormData();
@@ -64,7 +64,7 @@ const Add = ({ token }) => {
         toast.error(response.data.message);
       }
 
-      console.log(response);
+      // console.log(response);
     } catch (error) {}
   };
 

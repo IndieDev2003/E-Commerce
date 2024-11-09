@@ -11,7 +11,7 @@ const placeOrder = async (req, res) => {
       items,
       address,
       amount,
-      paymenMethod: "COD",
+      paymentMethod: "COD",
       payment: false,
       date: Date.now(),
     };
@@ -34,13 +34,39 @@ const placeOrderStripe = async (req, res) => {};
 const placeOrderRazorpay = async (req, res) => {};
 
 //All Orders for Admin Panel
-const allOrders = async (req, res) => {};
+const allOrders = async (req, res) => {
+  try {
+    const orders = await orderModel.find({})
+    res.json({success:true,orders})
+  } catch (error) {
+    res.json({success:false,message:error.message})
+  }
+};
 
 //User Order Data for frontend
-const userOrders = async (req, res) => {};
+const userOrders = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const orders = await orderModel.find({ userId });
+
+    res.json({ success: true, orders });
+  } catch (error) {
+    res.json({success:false,message:error.message})
+  }
+};
 
 //Update Order Status for Admin Panel
-const updateOrderStatus = async (req, res) => {};
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId, status } = req.body;
+
+    await orderModel.findByIdAndUpdate(orderId, { status })
+    res.json({success:true,message:"Status Updated"})
+  } catch (error) {
+    res.json({success:false,message:error.message})
+  }
+};
 
 export {
   allOrders,
