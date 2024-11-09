@@ -4,6 +4,7 @@ import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
 import { assets } from "../assets/assets";
 import { ShopContext } from "../Context/ShopContext";
+import { formToJSON } from "axios";
 
 const PlaceOrder = () => {
   const {
@@ -56,17 +57,18 @@ const PlaceOrder = () => {
       }
 
       console.log(orderItems)
+      console.log(formData)
 
     } catch (error) {
       console.log(error)
     }
-    console.log("hello")
+    // console.log("hello")
   };
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between gap-2 pt-5 sm:pt-14 min-h-[80vh] border-t">
+    <form onSubmit={ onSubmitHandler} className="flex flex-col sm:flex-row justify-between gap-2 pt-5 sm:pt-14 min-h-[80vh] border-t">
       {/* Left Side */}
-      <form
+      <div
         onSubmit={(e)=>onSubmitHandler(e)}
         className="flex flex-col gap-4 w-full sm:max-w-[480px]"
       >
@@ -75,6 +77,7 @@ const PlaceOrder = () => {
         </div>
 
         <div className="flex gap-3">
+          
           <input
             required
             value={formData.firstName}
@@ -162,7 +165,7 @@ const PlaceOrder = () => {
           placeholder="Phone"
         />
         <div></div>
-      </form>
+      </div>
 
       {/* Right Side */}
       <div className="mt-8">
@@ -228,7 +231,7 @@ const PlaceOrder = () => {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
